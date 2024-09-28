@@ -9,6 +9,7 @@ function MainRouter() {
         <Routes>
           {IndexRouer}
           <Route path="*" element={<Error404 />} />
+          
         </Routes>
       </BrowserRouter>
     

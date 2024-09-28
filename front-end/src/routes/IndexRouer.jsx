@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
-import Index from "../pages/Index/index";
+import Home from "../pages/Home";
 
 const IndexRouer = [
-  <Route key="index" path="/index" element={<Index />} />,
+  <Route key="index" path="/" element={<Home />} />,
 ];
 export default IndexRouer;
