@@ -22,8 +22,8 @@ function Home() {
         <div className="balance z-20 w-full bg-[#08070B] border-t-[1px] border-[#3C3B41] gap-2 flex flex-col items-start justify-center p-4">
           <div className="balance flex flex-row items-start justify-between w-full h-full">
             <div className="balance flex  flex-col items-start justify-start gap-2">
-              <div className=" bg-gradient-to-b from-[#FFB400] to-[#B80DDF] p-[2px] w-max ">
-                <h1 className="text-white bg-[#08070B] p-1 text-xs font-medium">
+              <div className=" bg-gradient-to-b from-[#FFB400] to-[#B80DDF] p-[1px] w-max ">
+                <h1 className="text-white bg-[#08070B] p-1 px-3 text-xs font-medium">
                   Total Balance
                 </h1>
               </div>

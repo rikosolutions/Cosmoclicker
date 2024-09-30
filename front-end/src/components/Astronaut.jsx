@@ -108,7 +108,7 @@ const Astronaut = ({ children }) => {
             animate={{
               opacity: 0,
               x: [number.startX, number.startX, targetPoint.x, targetPoint.x], // Converge horizontally to center
-              y: -1000, // First go 70% up, then converge to the top
+              y: -800, // First go 70% up, then converge to the top
             }}
             transition={{
               duration: 1.5,
@@ -117,7 +117,7 @@ const Astronaut = ({ children }) => {
             }}
             onAnimationComplete={() => handleAnimationEnd(number.id)} // Remove number after animation
           >
-            <img src={glare} alt="" className="mix-blend-color-dodge" />
+            <img src={glare} alt="" className=" h-10 w-10 mix-blend-color-dodge" />
           </motion.div>
         ))}
       </AnimatePresence>
