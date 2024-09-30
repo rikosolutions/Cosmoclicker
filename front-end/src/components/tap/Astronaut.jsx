@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import cn from "classnames";
-import "../assets/css/Tap.css";
-import glare from "../assets/glare.png";
-import bg from "../assets/svg/home-bg.svg";
+import "../../assets/css/Tap.css";
+import glare from "../../assets/glare.png";
+import bg from "../../assets/svg/home-bg.svg";
 
 const notCoinAppearence = {
   initial: { opacity: 0, scale: 0, y: 1000 },

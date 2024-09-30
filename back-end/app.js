@@ -25,16 +25,6 @@ if(process.env.MODE === "mainenance"){
     app.set("view engine", "ejs");
 }
 
-// Create a write stream (in append mode)
-if(process.env.ISLOG){
-  const logDirectory = path.dirname(process.env.LOG_FILE_PATH);
-    if (!fs.existsSync(logDirectory)) {
-      fs.mkdirSync(logDirectory, { recursive: true });
-    }
-  const accessLogStream = fs.createWriteStream(path.join(__dirname, process.env.LOG_FILE_PATH), { flags: 'a' });
-  app.use(logger(process.env.ISLOG,{ stream: accessLogStream }));
-}
-
 // Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

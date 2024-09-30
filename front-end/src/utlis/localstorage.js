@@ -4,13 +4,9 @@ const AUTH_TOKEN_KEY = 'auth_token';
 //*************** Session Functions ***************//
 
 export function setItem(key, value) {
-  try {
-    localStorage.setItem(key, value);
-    return localStorage.getItem(key) === value;
-  } catch (error) {
-    console.error(`Failed to set item: ${key}`, error);
-    return false;
-  }
+  
+  return  localStorage.setItem(key, value);
+   
 }
 
 /**
@@ -21,9 +17,7 @@ export function setItem(key, value) {
  */
 export function setItems(data) {
   for (const [key, value] of Object.entries(data)) {
-    if (!setItem(key, value)) {
-      throw new Error(`Failed to set session item: ${key}`);
-    }
+    setItem(key, value)
   }
   return true;
 }
