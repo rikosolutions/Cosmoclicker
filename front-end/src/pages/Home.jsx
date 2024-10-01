@@ -39,7 +39,6 @@ function Home() {
               const response = await axios.post("/api/auth/tg", tgUsers, {
                   signal: axioController.signal, 
               });
-  
               if (response.status === 200) {
                   const { isNewUser, sync_data } = response.data;
   
