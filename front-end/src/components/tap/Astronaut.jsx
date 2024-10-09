@@ -9,6 +9,7 @@ import Scorefootersection from "../tap/Scorefootersection";
 import axios from "../../utlis/axiosInstance";
 import _, { constant } from "lodash";
 import moment from "moment";
+import Minerpopup from "./Minerpopup";
 
 const notCoinAppearence = {
   initial: { opacity: 0, scale: 0, y: 1000 },
@@ -23,7 +24,7 @@ const notCoinAppearence = {
 const Astronaut = ({ children }) => {
   const [numbers, setNumbers] = useState([]); // Manage numbers with useState
   const buttonTransformRef = useRef({ scale: 1 });
-
+  const [open, setOpen] = useState({ isopen: false, heading: "", description: "",data:{} });
   const [isRestore, setIsRestore] = useState(false);
   const [details, setDetails] = useState({});
   const [currentEnergy, setCurrentEnergy] = useState();
@@ -60,8 +61,6 @@ const Astronaut = ({ children }) => {
     var miner_level = parseInt(localStorage.getItem("miner_level"));
     var restore_time = localStorage.getItem("restore_time");
     var energy = parseInt(localStorage.getItem("energy_remaining"));
-
-    console.log("tap render");
     if (_.isNil(energy) || isNaN(energy)) {
       energy = defultVal.enerylevel;
       localStorage.setItem("energy_remaining", energy);
@@ -76,8 +75,7 @@ const Astronaut = ({ children }) => {
       localStorage.setItem("restore_time", restore_time);
     }
 
-    
-
+  
     let refilEnery = energyRefilValue(energy, restore_time);
     if (energy == 0 && refilEnery <= 0) {
       energy = defultVal.enerylevel;
@@ -92,6 +90,17 @@ const Astronaut = ({ children }) => {
       localStorage.setItem("energy_remaining", energy);
       let restore_time = moment.utc().format("YYYY-MM-DD HH:mm:ss");
       localStorage.setItem("restore_time", restore_time);
+    }
+
+    const mineAmount = localStorage.getItem("miner") && localStorage.getItem("miner") !== '' ? parseFloat(localStorage.getItem("miner")) : 0;
+    const mine_at = sessionStorage.getItem('mine_at');
+    if (mineAmount > 0 && mine_at !== 'Y') {
+      setOpen((prevState) => ({
+        ...prevState,
+        isopen: true,
+        data:{mineAmount}
+      }));
+      
     }
 
     const local = {
@@ -179,7 +188,6 @@ const Astronaut = ({ children }) => {
 
   useEffect(() => {
     init();
-    console.log("inside the use effect");
     return () => {
       isMounted.current = false;
       if (syncTimeoutRef.current) {
@@ -248,9 +256,44 @@ const Astronaut = ({ children }) => {
     });
   };
 
+  const handleminnerclaim =async()=>{
+    await axios
+    .post("/api/minner/claim")
+    .then((res) => {
+      var {score} = res?.data?.data;
+      if (score) {
+        localStorage.setItem("score",score)
+        sessionStorage.setItem('mine_at', 'Y');
+        init();
+         setOpen((prevState) => ({
+            ...prevState,
+            isopen: false,
+          }));
+        setIsLoading(false); 
+        
+      } else {
+        throw new Error("Sync data is not found");
+      }
+    })
+    .catch((err) => {
+      if (err.response) {
+        const { status } = err.response;
+        if (status === 400) {
+          var data = err.response.data;
+          alert(data.message);
+          return navigate("/");
+        }
+      }
+    });
+
+
+  }
+
   return (
     <>
+    <Minerpopup open={open.isopen} data={open.data} setOpen={setOpen}  onClaim={handleminnerclaim} />
       <div className="clicker flex items-end h-full justify-center w-full  relative mt-14">
+        
         <div className="relative w-full h-full z-10">
           <img
             src={bg}
@@ -296,7 +339,7 @@ const Astronaut = ({ children }) => {
                     targetPoint.x,
                     targetPoint.x,
                   ], // Converge horizontally to center
-                  y: -1000, // First go 70% up, then converge to the top
+              y: -800, // First go 70% up, then converge to the top
                 }}
                 transition={{
                   duration: 1.5,
@@ -305,7 +348,7 @@ const Astronaut = ({ children }) => {
                 }}
                 onAnimationComplete={() => handleAnimationEnd(number.id)} // Remove number after animation
               >
-                <img src={glare} alt="" className="mix-blend-color-dodge" />
+            <img src={glare} alt="" className=" h-10 w-10 mix-blend-color-dodge" />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -314,6 +357,7 @@ const Astronaut = ({ children }) => {
       
       <Scorefootersection data={details} taps={currentEnergy} defultGas={1000} />
     </>
+    
   );
 };
 

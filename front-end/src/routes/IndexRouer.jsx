@@ -9,7 +9,7 @@ const IndexRouer = [
   <Route key="game" path="/game" element={<Game />} />,
   <Route key="Earn" path="/earn" element={<Earn />} />,
   <Route key="Quest" path="/quest" element={<Quest />} />,
-  <Route key="friend" path="/friends" element={<Quest />} />,
+  <Route key="friend" path="/friends" element={<Friends />} />,
   
 
 ];

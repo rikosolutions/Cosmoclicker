@@ -1,5 +1,6 @@
 const moment = require("moment");
 const _ = require("lodash");
+const crypto = require("crypto")
 
 /**
  * Checks if the current device is a mobile device based on the user agent string.
@@ -48,9 +49,46 @@ function getTapScore(req, earnings) {
   return [tapScore, isClientScore];
 }
 
+function addHours(value) {
+    
+  const [hours, minutes] = value.split(':').map(Number);
+  const nowUTC = moment.utc();
+  const futureTimeUTC = nowUTC.add(hours, 'hours').add(minutes, 'minutes');
+  return { 
+      "todate": futureTimeUTC.toDate(),
+      "toformate": futureTimeUTC.format('YYYY-MM-DD HH:mm:ss')
+  };
+}
+
+const verifyTelegramWebAppData = (TELEGRAM_BOT_TOKEN, telegramInitData) => {
+  const initData = new URLSearchParams(telegramInitData);
+
+  // Sort the parameters
+  const sortedInitData = new URLSearchParams(initData);
+  sortedInitData.sort();
+
+  // Get the hash
+  const hash = sortedInitData.get("hash");
+  sortedInitData.delete("hash");
+
+  // Prepare the data string to check
+  const dataToCheck = [...sortedInitData.entries()].map(([key, value]) => `${key}=${value}`).join("\n");
+
+  // Create the secret key using apiToken
+  const secretKey = crypto.createHmac("sha256", "WebAppData").update(apiToken).digest();
+
+  // Calculate the hash
+  const _hash = crypto.createHmac("sha256", secretKey).update(dataToCheck).digest("hex");
+
+  // Compare the hashes
+  return hash === _hash;
+};
+
 
 module.exports = {
   isMobileDevice,
-  getTapScore
+  getTapScore,
+  addHours,
+  verifyTelegramWebAppData
   
 };

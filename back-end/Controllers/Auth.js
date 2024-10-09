@@ -4,9 +4,20 @@ const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 const { Sequelize } = require("sequelize");
 const { sequelize } = require("../config/mysql-sequelize");
-const { isMobileDevice,getTapScore } =  require("../Utils/validator");
+const { isMobileDevice,getTapScore,verifyTelegramWebAppData } =  require("../Utils/validator");
 const Users = require("../Models/Users");
 const Earnings = require("../Models/Earnings");
+
+function isTimeCrossed(lastminedate) {
+    if (_.isNil(lastminedate) || _.isEmpty(lastminedate) || !moment(lastminedate, moment.ISO_8601, true).isValid()) {
+        return false;
+    }
+    const time = moment(lastminedate);
+    const currentTime = moment();
+    const diff = time.diff(currentTime);
+    return diff <= 0;
+}
+
 
 async function Auth(req, res, next) {
     var user_agent = req.headers["user-agent"];
@@ -29,34 +40,38 @@ async function Auth(req, res, next) {
             return res.status(422).json({ error: 'Unprocessable Entity', message: 'user data is not found' });
         }
 
-        const initUserData = tguser.initData.user;
+        console.log("tguser",tguser)
+
+        const { initDataRaw, initData, platform, referralBy } = tguser;
+
+        // console.log("vefiy",verifyTelegramWebAppData("7083287740:AAGrZim9naRtSBXgUWecVz-kg2OhN3wkixE",initDataRaw))
 
         var {
-                id, username, first_name, last_name,
-                language_code, referral_by, is_premium, 
-            } = initUserData;
+                id, username, firstName, lastName,
+                language_code, is_premium, 
+            } = initData.user;
 
-            console.log("initUserData",initUserData)
-
+        var referral_code = ''
         var sync_data = null;
 
         if (!_.isNil(id)) {
             var tgUser = await Users.findOne({
                 where: { userid: id }
             });
-
+            
             if (tgUser === null) {
-                referral_code = uuidv4().replace(/-/g, "");
+              referral_code = uuidv4().replace(/-/g, "");
+                
                 var tgUserData = {
                     userid: id,
                     username: username,
-                    first_name: first_name,
-                    last_name: last_name,
+                    first_name: firstName,
+                    last_name: lastName,
                     language_code: language_code,
-                    referral_by: referral_by,
+                    referral_by: referralBy,
                     referral_code: referral_code,
                 };
-                
+
                 if (is_premium === true) {
                     tgUserData["tg_premium_user"] = "Y";
                 }
@@ -72,9 +87,10 @@ async function Auth(req, res, next) {
                 }
 
                 sync_data = {
-                    referral_code: referral_code,
                     score: 0,
                     isNewuser:"Y",
+                    ph:0,
+                    mineAmmout:0,
                 };
 
             } else {
@@ -83,12 +99,12 @@ async function Auth(req, res, next) {
                         userid: tgUser.userid,
                     },
                 });              
-
+                referral_code = tgUser.referral_code && tgUser.referral_code!='' && tgUser.referral_code!=null ? tgUser.referral_code : '';
                 if (earnings !== null) {
 
                     var [tapScore, isClientScore ] = getTapScore(req, earnings);
-                    
-                    
+                    const ph = earnings.mining_amount && earnings.mining_amount!='' && earnings.mining_amount!=null ? parseInt(earnings.mining_amount) : 0
+            
                     if(isClientScore){
                         earnings.tap_score = tapScore;
                         earnings.last_tap_at = currentDate;
@@ -96,10 +112,19 @@ async function Auth(req, res, next) {
                     earnings.last_login_at = currentDate;
                     await earnings.save();
                     
+                    let isCrossed = isTimeCrossed(earnings.last_mine_at);
+                    let mineAmount = 0;
+
+                    if(isCrossed){
+                        if (!_.isEmpty(earnings) && !_.isNil(earnings.mining_amount) && !_.isEmpty(earnings.mining_amount) &&  !isNaN(Number(earnings.mining_amount)) && parseInt(earnings.mining_amount) > 0 ) {
+                            mineAmount = earnings.mining_amount && earnings.mining_amount!='' ? parseInt(earnings.mining_amount) : 0;
+                        }
+                    }
                     sync_data = {
-                        referral_code: tgUser.referral_code,
                         score: tapScore,
                         isNewuser:"N",
+                        ph:ph,
+                        miner:mineAmount
                     };
                 } else {
                     throw new Error(`Earnings is not found for ${id}`);
@@ -109,7 +134,7 @@ async function Auth(req, res, next) {
             var token = jwt.sign({
                     id: id,
                     username: username,
-                    referral_code: sync_data["referral_code"],
+                    referral_code
                 },
                 process.env.SECRET_KEY
             );

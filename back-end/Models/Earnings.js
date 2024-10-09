@@ -35,6 +35,21 @@ const Earnings = sequelize.define(
             type: DataTypes.DATE,
             defaultValue: null,
         },
+        task:{
+            type: DataTypes.STRING,
+            defaultValue: null,
+        },task_score:{
+            type: DataTypes.INTEGER,
+            defaultValue: null,
+        },
+        mining_amount: {
+            type: DataTypes.BIGINT,
+            defaultValue: 0,
+        },
+        last_mine_at: {
+            type: DataTypes.DATE,
+            defaultValue: null,
+        },
         created_date: {
             type: DataTypes.DATE,
             allowNull: false,
