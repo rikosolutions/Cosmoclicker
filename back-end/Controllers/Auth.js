@@ -40,9 +40,10 @@ async function Auth(req, res, next) {
             return res.status(422).json({ error: 'Unprocessable Entity', message: 'user data is not found' });
         }
 
-        console.log("tguser",tguser)
+        // console.log("tguser",tguser)
 
         const { initDataRaw, initData, platform, referralBy } = tguser;
+        // TODO:need to add vaildation
 
         // console.log("vefiy",verifyTelegramWebAppData("7083287740:AAGrZim9naRtSBXgUWecVz-kg2OhN3wkixE",initDataRaw))
 

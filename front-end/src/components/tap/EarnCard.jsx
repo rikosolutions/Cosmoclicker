@@ -6,7 +6,7 @@ function EarnCard({ isClaimable, price, isPurchased=false, nft, PPH,onBuy }) {
   }
     return (
       <div
-        className={`w-full p-[3px] relative  ${
+        className={`w-full max-h-[215px] p-[3px] relative  ${
           isClaimable || isPurchased
             ? "bg-gradient-to-tr from-[#B80EDE] to-[#FFB400]"
             : "bg-[#3C3B41] "
@@ -30,20 +30,20 @@ function EarnCard({ isClaimable, price, isPurchased=false, nft, PPH,onBuy }) {
               </a>
             </div>
           )}
-          {!isClaimable & !isPurchased && (
+          {!isClaimable & !isPurchased ? (
              <div className="gradient bg-[#3C3B41] p-[2px] absolute bottom-0 left-1/2 -translate-x-1/2 my-2 w-[90%]">
               <a className="text-sm font-medium text-white flex items-center justify-center py-1 px-4 bg-[#0A090F]">
                 Need Prior Card
               </a>
             </div>
-          )}
-          {!isClaimable & isPurchased && (
+          ):null}
+          {!isClaimable & isPurchased ? (
             <div className="gradient bg-[#3C3B41] p-[2px] absolute bottom-0 left-1/2 -translate-x-1/2 my-2 w-[90%]">
               <a className="text-sm font-medium text-white flex items-center justify-center py-1 px-4 bg-[#0A090F]">
                 PPH {PPH}
               </a>
             </div>
-          )}
+          ):null}
         </div>
       </div>
     );

@@ -96,7 +96,7 @@ function MinerBuyDrawer({
                   </div>
 
                   <div className="flex flex-row items-center justify-center w-[90%] gap-1">
-                    <div className="gradient bg-gradient-to-b from-[#FFB400] to-[#B80DDF] p-[2px] w-[90%]">
+                    <div className="gradient bg-gradient-to-b from-[#FFB400] to-[#B80DDF] p-[2px] flex-grow">
                       <a
                         className="text-sm font-medium text-white flex items-center justify-center py-1 px-4 bg-[#0A090F]"
                         onClick={() => {
@@ -106,7 +106,7 @@ function MinerBuyDrawer({
                         Cancel
                       </a>
                     </div>
-                    <div className="gradient bg-gradient-to-b from-[#FFB400] to-[#B80DDF] p-[2px] w-[90%]">
+                    <div className="gradient bg-gradient-to-b from-[#FFB400] to-[#B80DDF] p-[2px] flex-grow">
                       <a
                         className="text-sm font-medium text-white flex items-center justify-center py-1 px-4 bg-[#0A090F]"
                         onClick={() => {

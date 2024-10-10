@@ -10,6 +10,7 @@ import axios from "../../utlis/axiosInstance";
 import _, { constant } from "lodash";
 import moment from "moment";
 import Minerpopup from "./Minerpopup";
+import mainrobohome from "../../assets/mainrobohome.png";
 
 const notCoinAppearence = {
   initial: { opacity: 0, scale: 0, y: 1000 },
@@ -61,9 +62,16 @@ const Astronaut = ({ children }) => {
     var miner_level = parseInt(localStorage.getItem("miner_level"));
     var restore_time = localStorage.getItem("restore_time");
     var energy = parseInt(localStorage.getItem("energy_remaining"));
+    var ph = parseInt(localStorage.getItem("ph"));
     if (_.isNil(energy) || isNaN(energy)) {
       energy = defultVal.enerylevel;
       localStorage.setItem("energy_remaining", energy);
+    }
+
+    if (_.isNil(ph) || isNaN(ph)) {
+     
+      localStorage.setItem("ph", 0);
+      ph= 0
     }
 
     if (
@@ -107,6 +115,7 @@ const Astronaut = ({ children }) => {
       score,
       miner_level,
       restore_time,
+      ph
     };
     setCurrentEnergy(energy);
     setDetails(local);

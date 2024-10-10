@@ -87,12 +87,14 @@ async function getminerlist(earnDetails, userid) {
             const minnerLevel = isMinnerPurchased ? parseInt(minerInShopDetails.minner_level) || 1 : 1;
             const minnerProfitPerHr = parseInt(minner.profit_per_hr) || 0;
             const minnerPurchaseAmount = parseInt(minner.purchase_amount) || 0;
+
         
             const temp_minner = {
                 id: minner.id,
                 title: minner.title,
                 profit_per_hr: (minnerProfitPerHr * minnerLevel),
                 purchase_amount: (minnerPurchaseAmount * minnerLevel),
+                image:minner.image,
                 status: "locked",
             };
         
@@ -107,10 +109,11 @@ async function getminerlist(earnDetails, userid) {
         
 
             if (acc[under_by].my_minners.length === 0 && index === 0) {
+                temp_minner.status = "unlocked";
                 
-                if (temp_minner.purchase_amount <= earn_tapScore) {
-                    temp_minner.status = "unlocked";
-                }
+                // if (temp_minner.purchase_amount <= earn_tapScore) {
+                //     temp_minner.status = "unlocked";
+                // }
                 
             }
     

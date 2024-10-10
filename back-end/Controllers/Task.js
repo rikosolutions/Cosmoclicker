@@ -165,7 +165,7 @@ async function list(req, res, next) {
         }
         const grouptask = tasks.reduce((acc, task) => {
             const groupTitle = task.quest_group_title;
-            console.log("groupTitle",groupTitle)
+            // console.log("groupTitle",groupTitle)
             if (!acc[groupTitle]) acc[groupTitle] = [];
 
             const status = Object.keys(taskDetailsUpdate).find(key => {
@@ -189,6 +189,7 @@ async function list(req, res, next) {
             avaible_task_count:taskDetailsUpdate["unlocked_task"].length,
             totalSuccessTask: taskDetailsUpdate["success_task"].length,
         };
+        // console.log("others",others)
 
         return res.status(200).json({message: 'Success',data: { tasklist: grouptask, others }});
     } catch (error) {
@@ -314,7 +315,7 @@ async function checkTask(req, res, next) {
         }
 
     }catch(e){
-        console.log("Error",e)
+        // console.log("Error",e)
         next("Error in check the task");
     }
 }

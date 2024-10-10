@@ -30,6 +30,10 @@ const MinerShop = sequelize.define(
             type: DataTypes.STRING(150),
             allowNull: false,
         },
+        image: {
+            type: DataTypes.STRING(250),
+            allowNull: false,
+        },
         created_date: {
             type: DataTypes.DATE,
             allowNull: false,

@@ -95,4 +95,5 @@ div.spinner div.bar12 {
   justify-content: center;
   z-index: 50; /* Ensure it’s above other content */
   visibility: hidden; /* Default to hidden */
+  background: linear-gradient(to bottom, #FFB400, #B80DDF);
 }

@@ -10,14 +10,29 @@ import HomeLayout from "../layout/HomeLayout";
 import EarnCard from "../components/tap/EarnCard";
 import Error500 from "./error/Error500";
 import MinerBuyDrawer from "../components/tap/MinerBuyDrawer";
-// import Minerpopup from "../components/tap/Minerpopup";
+
+import robowhite from "../assets/minner/robowhite.png"
+import blackrobo from "../assets/minner/blackrobo.png"
+import redrobo from "../assets/minner/redrobo.png"
+import yellowrobo from "../assets/minner/yellowrobo.png"
+
 import Nft from "../assets/robot.png";
+
+const nfts = {
+  "robowhite.png":robowhite,
+  "blackrobo.png":blackrobo,
+  "redrobo.png":redrobo,
+  "yellowrobo.png":yellowrobo,
+}
+
+
 function Earn() {
   const [activeTab, setActiveTab] = useState("newCards");
   const [taskDetails, setTaskDetails] = useState({});
   const [open, setOpen] = useState({ isopen: false, heading: "", description: "",data:{} });
   const [myMinnerDetails, setMyMinnerDetails] = useState([]);
   const [newMinnerDetails, setNewMinnerDetails] = useState([]);
+  const [newNft, setnewNft] = useState(Nft)
   const [balance ,setBalance] = useState({ score:0, ph:0 })
   
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +89,7 @@ function Earn() {
       const response = await axios.post("/api/minner/upgrade", { minner_id: item.id });
       if (response.status === 200) {
         const { minnerId, score,ph } = response.data?.data;
-        console.log({ minnerId, score,ph })
+        // console.log({ minnerId, score,ph })
         localStorage.setItem("score",score) 
         localStorage.setItem("ph",ph) 
         setBalance({
@@ -125,7 +140,8 @@ function Earn() {
   }
 
   const handleminnerPopup =(item)=>{
-    console.log("item",item)
+    
+    setnewNft(item.image ? nfts[item.image] : Nft )
     setOpen((prevState) => ({
       ...prevState,
       isopen: true,
@@ -158,17 +174,17 @@ function Earn() {
                 />
               )}
             </AnimatePresence>
-            <MinerBuyDrawer open={open.isopen} data={open.data} setOpen={setOpen} nft={Nft} onBuy={handleminnerBuy} onCancel={handleCancel}/>
+            <MinerBuyDrawer open={open.isopen} data={open.data} setOpen={setOpen} nft={newNft} onBuy={handleminnerBuy} onCancel={handleCancel}/>
             <div className="earner flex flex-col items-center h-full justify-between w-full overflow-y-scroll relative mt-14 px-4">
-              <div className="content w-full h-full flex mb-14">
+              <div className="content w-full h-full flex mb-15">
                 {activeTab === "newCards" && (
                   <>
                     {newMinnerDetails.length > 0 ? (
-                      <div className="w-full h-10 grid grid-cols-2 gap-4">
+                      <div className="w-full h-15 grid grid-cols-2 gap-4">
                         {newMinnerDetails.map((item) => (
                           <EarnCard
                             key={item.id}
-                            nft={astro}
+                            nft={item.image ? nfts[item.image] :  astro}
                             isClaimable={item.status === "unlocked"}
                             price={item.purchase_amount}
                             onBuy={() => handleminnerPopup(item)}
@@ -177,7 +193,7 @@ function Earn() {
                       </div>
                     ) : (
                       <div className="flex w-full h-full justify-center items-center text-white font-medium">
-                        Building new Miners...
+                        Building new Cards....
                       </div>
                     )}
                   </>
@@ -185,11 +201,11 @@ function Earn() {
                 {activeTab === "myCards" && (
                   <>
                     {myMinnerDetails.length > 0 ? (
-                      <div className="w-full h-10 grid grid-cols-2 gap-4">
+                      <div className="w-full h-15 grid grid-cols-2 gap-4">
                         {myMinnerDetails.map((item) => (
                           <EarnCard
                             key={item.id}
-                            nft={astro}
+                            nft={item.image ? nfts[item.image] :  astro}
                             isClaimable={false}
                             isPurchased= {item.status == "Purchased"}
                             PPH={item.profit_per_hr}
@@ -198,14 +214,14 @@ function Earn() {
                       </div>
                     ) : (
                       <div className="w-full h-full flex justify-center items-center text-white font-medium">
-                        Buy Miners to Earn More!
+                        Buy new card to start earning
                       </div>
                     )}
                   </>
                 )}
               </div>
   
-              <div className="tab flex w-full flex-row items-center justify-center gap-4 sticky bottom-0">
+              <div className="tab flex w-full flex-row items-center justify-center gap-4 sticky bottom-2">
                 {/* My Cards Tab */}
                 <div
                   className={`gradient  p-[2px] w-full ${
@@ -256,7 +272,7 @@ function Earn() {
                   <h1 className="text-white text-sm font-medium">Profit</h1>
                   <div className="border-2 border-[#525252]/25 px-6 bg-[#111115] py-2">
                     <h1 className="text-white text-base font-medium">
-                      {balance && balance.ph !== "" ? balance.ph : 0} PH
+                      {balance && balance.ph !== "" ? balance.ph : 0} PPH
                     </h1>
                   </div>
                 </div>

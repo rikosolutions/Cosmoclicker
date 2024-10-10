@@ -17,7 +17,7 @@ function Scorefootersection({ data ,taps,defultGas}) {
           <div className="flex-col flex items-center justify-center gap-2">
             <h1 className="text-white text-sm font-medium">Profit</h1>
             <div className="border-2 border-[#525252]/25 px-6 bg-[#111115] py-2">
-              <h1 className="text-white text-base font-medium">250 PH</h1>
+              <h1 className="text-white text-base font-medium">{data.ph ? data.ph : 0} PPH</h1>
             </div>
           </div>
         </div>
