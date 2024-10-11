@@ -43,7 +43,7 @@ function Friends() {
       });
       if (response.status === 200) {
         const res = response?.data?.data;
-        const GAME_TG_URL = "https://t.me/asdgjhaduhy_bot/test_taptap";
+        const GAME_TG_URL = "https://t.me/CosmoClickerBot/app";
         setRefLink(`${GAME_TG_URL}?startapp=${res.refCode}`);
         setFriends(res.friends);
         setOtherDetails(res.otherdetails);
@@ -53,7 +53,7 @@ function Friends() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      navigate("/");
+      navigate("/home");
     }
   };
   const claim = async (friendId) => {
@@ -120,7 +120,7 @@ function Friends() {
     e.preventDefault();
     utils.shareURL(
       refLink,
-      "Don't miss out on exciting rewards, Astrospace now!"
+      "Don't miss out on exciting rewards, Cosmo now!"
     );
   }
 

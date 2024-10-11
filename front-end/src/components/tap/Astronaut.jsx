@@ -290,7 +290,7 @@ const Astronaut = ({ children }) => {
         if (status === 400) {
           var data = err.response.data;
           alert(data.message);
-          return navigate("/");
+          return navigate("/home");
         }
       }
     });

@@ -8,7 +8,7 @@ function Auth({ children }) {
   return isAuth() === true ? (
     children
   ) : (
-    <Navigate to={{ pathname: "/" }} />
+    <Navigate to={{ pathname: "/home" }} />
   );
 }
 

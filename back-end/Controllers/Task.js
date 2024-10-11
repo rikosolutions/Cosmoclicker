@@ -186,8 +186,8 @@ async function list(req, res, next) {
 
         const others = {
             totalTask: tasks.length,
-            avaible_task_count:taskDetailsUpdate["unlocked_task"].length,
-            totalSuccessTask: taskDetailsUpdate["success_task"].length,
+            avaible_task_count:taskDetailsUpdate && taskDetailsUpdate["unlocked_task"].length ? taskDetailsUpdate["unlocked_task"].length : 0,
+            totalSuccessTask: taskDetailsUpdate && taskDetailsUpdate["success_task"] ? taskDetailsUpdate["success_task"].length : 0,
         };
         // console.log("others",others)
 

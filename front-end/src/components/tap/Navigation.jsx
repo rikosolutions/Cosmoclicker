@@ -34,7 +34,7 @@ const tabs = [
         </defs>
       </>
     ),
-    path: "/",
+    path: "/home",
   },
   {
     id: "earn",

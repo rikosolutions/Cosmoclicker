@@ -75,7 +75,7 @@ function Quest() {
             if (response.status === 200) {
                 const resdata = response?.data?.data;
                 if (containsTelegramUrl(task.url)) {
-                    window.Telegram.WebApp.openLink(task.url);
+                    window.Telegram.WebApp.openTelegramLink(task.url);
                 } else if (!task.url.includes("story")) {
                     window.Telegram.WebApp.openLink(task.url);   
                 }
